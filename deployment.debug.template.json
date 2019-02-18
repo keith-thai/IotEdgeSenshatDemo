@@ -89,6 +89,29 @@
                 }
               }
             }
+          },
+          "SenseHatDisplay": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.SenseHatDisplay.debug}",
+              "createOptions": {
+                "ExposedPorts": {
+                  "5678/tcp": {}
+                },
+                "HostConfig": {
+                  "PortBindings": {
+                    "5678/tcp": [
+                      {
+                        "HostPort": "5678"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -98,7 +121,8 @@
         "schemaVersion": "1.0",
         "routes": {
           "SenseHatSensorsToIoTHub": "FROM /messages/modules/SenseHatSensors/outputs/* INTO $upstream",
-          "sensorToSenseHatSensors": "FROM /messages/modules/tempSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SenseHatSensors/inputs/input1\")"
+          "sensorToSenseHatSensors": "FROM /messages/modules/tempSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SenseHatSensors/inputs/input1\")",
+          "SenseHatDisplayToIoTHub": "FROM /messages/modules/SenseHatDisplay/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
