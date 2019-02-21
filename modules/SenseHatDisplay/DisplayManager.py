@@ -1,4 +1,3 @@
-import sense_hat
 from sense_hat import SenseHat
 import time
 from enum import Enum
