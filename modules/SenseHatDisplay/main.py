@@ -9,6 +9,8 @@ import iothub_client
 # pylint: disable=E0611
 from iothub_client import IoTHubModuleClient, IoTHubClientError, IoTHubTransportProvider
 from iothub_client import IoTHubMessage, IoTHubMessageDispositionResult, IoTHubError
+import DisplayManager
+from DisplayManager import DisplayManager
 
 # messageTimeout - the maximum time in milliseconds until a message times out.
 # The timeout period starts at IoTHubModuleClient.send_event_async.
@@ -38,15 +40,11 @@ def send_confirmation_callback(message, result, user_context):
 # we will forward this message onto the "output1" queue.
 def receive_message_callback(message, hubManager):
     global RECEIVE_CALLBACKS
-    message_buffer = message.get_bytearray()
-    size = len(message_buffer)
-    print ( "    Data: <<<%s>>> & Size=%d" % (message_buffer[:size].decode('utf-8'), size) )
-    map_properties = message.properties()
-    key_value_pair = map_properties.get_internals()
-    print ( "    Properties: %s" % key_value_pair )
     RECEIVE_CALLBACKS += 1
-    print ( "    Total calls received: %d" % RECEIVE_CALLBACKS )
-    hubManager.forward_event_to_output("output1", message, 0)
+    print("Received message #: "+ str(RECEIVE_CALLBACKS))
+    DISPLAY_MANAGER.DisplayMessage(str(RECEIVE_CALLBACKS) + " Messages Received")
+    
+    #hubManager.forward_event_to_output("output1", message, 0)
     return IoTHubMessageDispositionResult.ACCEPTED
 
 
@@ -80,9 +78,11 @@ def main(protocol):
 
         print ( "Starting the IoT Hub Python module using protocol %s..." % hub_manager.client_protocol )
         print ( "The module is now waiting for messages and will indefinitely.  Press Ctrl-C to exit. ")
+        global DISPLAY_MANAGER
+        DISPLAY_MANAGER = DisplayManager()
 
         while True:
-            time.sleep(1)
+            time.sleep(10)
 
     except IoTHubError as iothub_error:
         print ( "Unexpected error %s from IoTHub" % iothub_error )

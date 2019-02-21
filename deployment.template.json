@@ -86,7 +86,7 @@
         "routes": {
           "SenseHatSensorsToIoTHub": "FROM /messages/modules/SenseHatSensors/outputs/* INTO $upstream",
           "sensorToSenseHatSensors": "FROM /messages/modules/tempSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SenseHatSensors/inputs/input1\")",
-          "SenseHatDisplayToIoTHub": "FROM /messages/modules/SenseHatDisplay/outputs/* INTO $upstream"
+          "sensorToSenseHatDisplay": "FROM /messages/modules/tempSensor/outputs/* INTO BrokeredEndPoint(\"/modules/SenshatDisplay/inputs/input1\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
