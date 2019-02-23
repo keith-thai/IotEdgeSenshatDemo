@@ -73,8 +73,8 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.SenseHatDisplay}",
-              "createOptions": {}
+              "image": "${MODULES.SenseHatDisplay.arm32v7}",
+              "createOptions": "{\"HostConfig\":{\"Privileged\": true}}"
             }
           }
         }
@@ -85,8 +85,7 @@
         "schemaVersion": "1.0",
         "routes": {
           "SenseHatSensorsToIoTHub": "FROM /messages/modules/SenseHatSensors/outputs/* INTO $upstream",
-          "sensorToSenseHatSensors": "FROM /messages/modules/tempSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SenseHatSensors/inputs/input1\")",
-          "sensorToSenseHatDisplay": "FROM /messages/modules/tempSensor/outputs/* INTO BrokeredEndPoint(\"/modules/SenshatDisplay/inputs/input1\")"
+          "SenseHatSensorsToSenseHatDisplay": "FROM /messages/modules/SenseHatSensors/outputs/* INTO BrokeredEndPoint(\"/modules/SenseHatDisplay/inputs/input1\")"         
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
